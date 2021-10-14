@@ -21,7 +21,7 @@ module feistel_function(
     // 28 29 30 31 32 1
     wire [31:0] e;
     assign e = i_data;
-    assign expanded = 
+    assign expanded =
         { e[0],  e[31], e[30], e[29], e[28], e[27],
           e[28], e[27], e[26], e[25], e[24], e[23],
           e[24], e[23], e[22], e[21], e[20], e[19],

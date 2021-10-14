@@ -1,8 +1,5 @@
 `timescale 1ns / 100ps
 
-// 2. Transmit block for uart
-// This is the test bench
-
 module tb_des();
 
     reg i_clk, tb_send, tb_rst;
@@ -37,9 +34,9 @@ module tb_des();
     dut(.i_clk,
         .i_cleartext,
         .i_key,
-        .i_dv,               // Input data valid
+        .i_dv,
         .o_ciphertext,
-        .o_dv           // Output data valid
+        .o_dv
     );
 
     // Clock
@@ -65,7 +62,7 @@ module tb_des();
         $display("*** Simulation done with %0d errors at time %0t ***", errors, $time);
         $finish;
 
-    end  // end initial begin
+    end
 
 
 endmodule
