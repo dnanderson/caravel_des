@@ -25,7 +25,6 @@ module key_round(
     end
 
     // key permutation 2 described here, 1-indexed starting from bit 0 up
-    // Below is reversed and zero indexed to assign correctly
     //   14 17 11 24 1 5
     //   3 28 15 6 21 10
     //   23 19 12 4 26 8
@@ -39,14 +38,14 @@ module key_round(
     wire [55:0] p;
     assign p = {shift_i_c, shift_i_d};
     assign o_rd_key =
-    { p[31], p[28], p[35], p[49], p[41], p[45],
-      p[52], p[33], p[55], p[38], p[48], p[43],
-      p[47], p[32], p[44], p[50], p[39], p[29],
-      p[54], p[46], p[36], p[30], p[51], p[40],
-      p[1],  p[12], p[19], p[26], p[6],  p[15],
-      p[7],  p[25], p[3],  p[11], p[18], p[22],
-      p[9],  p[20], p[5],  p[14], p[27], p[2],
-      p[4],  p[0],  p[23], p[10], p[16], p[13]};
+        { p[42], p[39], p[45], p[32], p[55], p[51],
+          p[53], p[28], p[41], p[50], p[35], p[46],
+          p[33], p[37], p[44], p[52], p[30], p[48],
+          p[40], p[49], p[29], p[36], p[43], p[54],
+          p[15], p[4],  p[25], p[19], p[9],  p[1],
+          p[26], p[16], p[5],  p[11], p[23], p[8],
+          p[12], p[7],  p[17], p[0],  p[22], p[3],
+          p[10], p[14], p[6],  p[20], p[27], p[24]};
 
 
     always@(posedge i_clk) begin
