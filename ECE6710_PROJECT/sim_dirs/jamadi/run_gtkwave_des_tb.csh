@@ -1,0 +1,1 @@
+../../scripts/run_gtkwave_des_tb.csh
