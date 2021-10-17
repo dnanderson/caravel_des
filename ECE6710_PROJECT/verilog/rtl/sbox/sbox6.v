@@ -1,3 +1,5 @@
+`timescale 1ns / 100ps
+
 module sbox6(
     input [5:0] i_data,
     output reg [3:0] o_data

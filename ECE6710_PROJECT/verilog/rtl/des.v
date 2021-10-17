@@ -1,3 +1,6 @@
+`timescale 1ns / 100ps
+
+
 module des(
     input i_clk,              // System clock
     input [63:0] i_cleartext,        

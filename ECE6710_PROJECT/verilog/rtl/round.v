@@ -1,3 +1,4 @@
+`timescale 1ns / 100ps
 // This round is repeated 16 different times in the main algorithm of DES
 
 module round(

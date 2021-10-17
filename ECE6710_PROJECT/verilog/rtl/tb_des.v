@@ -10,8 +10,8 @@ module tb_des();
     wire o_dv;
     integer errors, b_errors, i;
 
-    reg[63:0] teststring = "12345678";
-    reg[63:0] testkey = "12345678";
+    reg[63:0] teststring = 64'h921a72b60268a21a;
+    reg[63:0] testkey = 64'hca404e1b3f4f9230;
 
     task simulate_des_input;
         input [63:0] data;
@@ -49,14 +49,14 @@ module tb_des();
 
     // Main test block
     initial begin
-        $dumpfile("out.vcd");
+        $dumpfile("DES_TB.vcd");
         $dumpvars;
 
         errors = 0;
         $timeformat(-9, 0, " ns", 20);
         $display("*** Start of Simulation ***");
 
-        simulate_des_input(teststring, teststring);
+        simulate_des_input(teststring, testkey);
         repeat (20000) @ (negedge i_clk);
 
         $display("*** Simulation done with %0d errors at time %0t ***", errors, $time);

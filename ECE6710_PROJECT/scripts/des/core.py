@@ -164,18 +164,17 @@ def derive_keys(key):
 def encode_block(block, derived_keys, encryption):
     block = permute(block, 64, INITIAL_PERMUTATION)
     block = block >> 32, block & 0xffffffff
-    #print("First blocks")
-    #print(hex(block[0]), hex(block[1]))
+    # print("First blocks")
+    # print(hex(block[0]), hex(block[1]))
 
-    ROUNDNUM = 0
+    # ROUNDNUM = 0
     if not encryption:
         derived_keys = reversed(derived_keys)
     for key in derived_keys:
-        print(f'Round {ROUNDNUM}')
-        ROUNDNUM += 1
+        # print(f'Round {ROUNDNUM}')
+        # ROUNDNUM += 1
         # print(hex(key))
         block = block[1], block[0] ^ f(block[1], key)
-        print(hex(block[0]), hex(block[1]))
-    import pdb; pdb.set_trace()
+        # print(hex(block[0]), hex(block[1]))
 
     return permute(block[1] << 32 | block[0], 64, INVERSE_PERMUTATION)

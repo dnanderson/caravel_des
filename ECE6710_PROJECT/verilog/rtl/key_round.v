@@ -1,3 +1,6 @@
+`timescale 1ns / 100ps
+
+
 module key_round(
     input i_clk,              // System clock
     input i_dv,               // Input data valid

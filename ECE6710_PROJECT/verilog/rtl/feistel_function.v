@@ -1,3 +1,5 @@
+`timescale 1ns / 100ps
+
 module feistel_function(
     input [31:0] i_data,
     input [47:0] i_key,
