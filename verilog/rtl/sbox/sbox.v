@@ -1,4 +1,4 @@
-
+`timescale 1ns / 100ps
 
 module sbox(
     input [47:0] i_data,

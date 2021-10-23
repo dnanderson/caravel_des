@@ -1,11 +1,16 @@
+# This script prepares input and expected output for testbench comparisons
+# This one only does encryption, with no decryption results
+
 import des
 from binascii import hexlify
 import os
 
-# key0 = des.DesKey(bytes.fromhex('ca404e1b3f4f9230'))
-# print(key0.is_single())
-# result = key0.encrypt(bytes.fromhex('921a72b60268a21a'))
-# print(result.hex())
+#key0 = des.DesKey(bytes.fromhex('70fd83bfd28dbfb5'))
+#print(key0.is_single())
+#result = key0.encrypt(bytes.fromhex('958313539316391d'))
+#result = key0.decrypt(bytes.fromhex('c75db0062f1ba381'))
+
+#print(result.hex())
 
     # reg[63:0] teststring = 64'h921a72b60268a21a;
     # reg[63:0] testkey = 64'hca404e1b3f4f9230;
@@ -39,5 +44,5 @@ with open('block_input.txt', 'w+') as f:
         f.write(block.hex() + '\n')
 
 with open('expected.txt', 'w+') as f:
-    for encrypted in encrypts:
+    for encrypted in encrypts: # Encryption results
         f.write(encrypted.hex() + '\n')

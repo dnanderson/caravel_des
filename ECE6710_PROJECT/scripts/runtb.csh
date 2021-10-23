@@ -1,4 +1,5 @@
 pushd .
+python3 prepare_des_results.py
 cd ../verilog/rtl
 rm -f ./DES_TB.out
 rm -f ./DES_TB.vcd

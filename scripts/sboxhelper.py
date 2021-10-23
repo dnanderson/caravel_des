@@ -1,3 +1,5 @@
+# This script makes sbox case statement modules
+
 import os
 try:
     os.mkdir('sbox_verilog')
@@ -7,6 +9,7 @@ os.chdir('sbox')
 
 def make_wrap(f, lines):
     modulename = os.path.splitext(os.path.basename(f.name))[0]
+    f.write('`timescale 1ns / 100ps\n\n\n')
     f.write(f'module {modulename}(\n')
     f.write(f'    input [5:0] i_data,\n')
     f.write(f'    output reg [3:0] o_data\n')

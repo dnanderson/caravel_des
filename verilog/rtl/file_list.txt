@@ -11,4 +11,4 @@ key_round.v
 feistel_function.v
 round.v
 des.v
-tb_des.v
+des_decrypt_tb.v

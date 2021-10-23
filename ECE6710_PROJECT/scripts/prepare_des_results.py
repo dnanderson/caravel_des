@@ -1,5 +1,7 @@
-# This script prepares input and expected output for testbench comparisons
-# This one only does encryption, with no decryption results
+
+# This creates inputs to encrypt and expected encrypted outputs
+# This one creates an expected output that includes 1000 encrypted parts
+# and 1000 original results
 
 import des
 from binascii import hexlify
@@ -44,5 +46,11 @@ with open('block_input.txt', 'w+') as f:
         f.write(block.hex() + '\n')
 
 with open('expected.txt', 'w+') as f:
+    for encrypted in encrypts: # Encryption results
+        f.write(encrypted.hex() + '\n')
+    for block in blocks: # Original, from decryption
+        f.write(block.hex() + '\n')
+
+with open('encrypted.txt', 'w+') as f:
     for encrypted in encrypts: # Encryption results
         f.write(encrypted.hex() + '\n')

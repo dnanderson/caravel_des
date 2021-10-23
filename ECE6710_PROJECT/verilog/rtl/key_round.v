@@ -7,6 +7,8 @@ module key_round(
     input [27:0] i_c,
     input [27:0] i_d,
     input i_shift_indicator,
+    input i_encrypt,
+    output reg o_encrypt,
     output [47:0] o_rd_key,
     output reg [27:0] o_c,
     output reg [27:0] o_d
@@ -16,18 +18,34 @@ module key_round(
     reg [27:0] shift_i_d;
 
     // Perform a bit rotation
-    always@ (i_c, i_d) begin
-        if (i_shift_indicator) begin
-            shift_i_c <= {i_c[26:0], i_c[27]};
-            shift_i_d <= {i_d[26:0], i_d[27]};
+    // If shift indicator is 1 we only do a rot of 1
+    // If shift indicator is 0 we do a rot of 2
+    // i_encrypt 1 rot left
+    // i_encrypt 0 rot right
+    always@ (i_c, i_d, i_encrypt, i_shift_indicator) begin
+        if (i_encrypt == 1'b1) begin
+            if (i_shift_indicator == 1'b1) begin
+                shift_i_c <= {i_c[26:0], i_c[27]};
+                shift_i_d <= {i_d[26:0], i_d[27]};
+            end
+            else begin
+                shift_i_c <= {i_c[25:0], i_c[27:26]};
+                shift_i_d <= {i_d[25:0], i_d[27:26]};
+            end
         end
         else begin
-            shift_i_c <= {i_c[25:0], i_c[27:26]};
-            shift_i_d <= {i_d[25:0], i_d[27:26]};
+            if (i_shift_indicator == 1'b1) begin
+                shift_i_c <= {i_c[0], i_c[27:1]};
+                shift_i_d <= {i_d[0], i_d[27:1]};
+            end
+            else begin
+                shift_i_c <= {i_c[1:0], i_c[27:2]};
+                shift_i_d <= {i_d[1:0], i_d[27:2]};
+            end
         end
     end
 
-    // key permutation 2 described here, 1-indexed starting from bit 0 up
+    // key permutation 2 described here
     //   14 17 11 24 1 5
     //   3 28 15 6 21 10
     //   23 19 12 4 26 8
@@ -55,6 +73,7 @@ module key_round(
         if(i_dv) begin
             o_c = shift_i_c;
             o_d = shift_i_d;
+            o_encrypt <= i_encrypt;
         end
     end
 

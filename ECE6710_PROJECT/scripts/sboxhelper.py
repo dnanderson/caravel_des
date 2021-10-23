@@ -1,3 +1,5 @@
+# This script makes sbox case statement modules
+
 import os
 try:
     os.mkdir('sbox_verilog')

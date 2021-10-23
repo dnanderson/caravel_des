@@ -155,7 +155,9 @@ def derive_keys(key):
     key, = struct.unpack(">Q", key)
     next_key = permute(key, 64, PERMUTED_CHOICE1)
     next_key = next_key >> 28, next_key & 0x0fffffff
+    #print(hex(next_key[0]), hex(next_key[1]))
     for bits in ROTATES:
+        #print(hex(next_key[0]), hex(next_key[1]))
         next_key = rotate_left(next_key[0], bits), rotate_left(next_key[1], bits)
         result = permute(next_key[0] << 28 | next_key[1], 56, PERMUTED_CHOICE2)
         yield result
@@ -164,17 +166,17 @@ def derive_keys(key):
 def encode_block(block, derived_keys, encryption):
     block = permute(block, 64, INITIAL_PERMUTATION)
     block = block >> 32, block & 0xffffffff
-    # print("First blocks")
-    # print(hex(block[0]), hex(block[1]))
+    #print("First blocks")
+    #print(hex(block[0]), hex(block[1]))
 
-    # ROUNDNUM = 0
+    ROUNDNUM = 0
     if not encryption:
         derived_keys = reversed(derived_keys)
     for key in derived_keys:
-        # print(f'Round {ROUNDNUM}')
-        # ROUNDNUM += 1
-        # print(hex(key))
+        #print(f'Round {ROUNDNUM}')
+        ROUNDNUM += 1
+        #print(hex(key))
         block = block[1], block[0] ^ f(block[1], key)
-        # print(hex(block[0]), hex(block[1]))
+        #print(hex(block[0]), hex(block[1]))
 
     return permute(block[1] << 32 | block[0], 64, INVERSE_PERMUTATION)

@@ -1,15 +1,21 @@
+`timescale 1ns / 100ps
+
+
 module des(
     input i_clk,              // System clock
     input [63:0] i_cleartext,        
     input [63:0] i_key,
     input i_dv,               // Input data valid
+    input i_encrypt,          // if 1 encrypt, if 0 decrypt the input
     output [63:0] o_ciphertext,
-    output o_dv           // Output data valid
+    output o_dv               // Output data valid
     );
 
     wire [63:0] round_data [0:16];
     wire [47:0] round_key [0:16];
     wire round_dv [0:16];
+    wire round_enc [0:16];
+
 
     // Key shift schedule: 1 means shift 1, 0 means shift 2
     reg [16:0] SHIFT_SCHEDULE = 16'b1000000100000011;
@@ -47,27 +53,45 @@ module des(
     // 1 58 50 42 34 26 18
     // 10 2 59 51 43 35 27
     // 19 11 3 60 52 44 36
-    wire [27:0] round_c [0:16];
-    assign round_c[0] = 
+    wire [27:0] round_c_perm;
+    wire [27:0] round_c_shift;
+    assign round_c_perm = 
         { ik[7],  ik[15], ik[23], ik[31], ik[39], ik[47], ik[55],
           ik[63], ik[6],  ik[14], ik[22], ik[30], ik[38], ik[46],
           ik[54], ik[62], ik[5],  ik[13], ik[21], ik[29], ik[37],
           ik[45], ik[53], ik[61], ik[4],  ik[12], ik[20], ik[28]};
 
-    // // D Creation
-    // // 63 55 47 39 31 23 15
-    // // 7 62 54 46 38 30 22
-    // // 14 6 61 53 45 37 29
-    // // 21 13 5 28 20 12 4 
-    wire [27:0] round_d [0:16];
-    assign round_d[0] =
+    // D Creation
+    // 63 55 47 39 31 23 15
+    // 7 62 54 46 38 30 22
+    // 14 6 61 53 45 37 29
+    // 21 13 5 28 20 12 4 
+    wire [27:0] round_d_perm;
+    wire [27:0] round_d_shift;
+    assign round_d_perm =
         { ik[1],  ik[9],  ik[17], ik[25], ik[33], ik[41], ik[49],
           ik[57], ik[2],  ik[10], ik[18], ik[26], ik[34], ik[42],
           ik[50], ik[58], ik[3],  ik[11], ik[19], ik[27], ik[35],
           ik[43], ik[51], ik[59], ik[36], ik[44], ik[52], ik[60]};
 
+    assign round_c_shift = {round_c_perm[26:0], round_c_perm[27]};
+    assign round_d_shift = {round_d_perm[26:0], round_d_perm[27]};
+
+
+    // Selects between creating the final key Kn or the first key
+    // The only difference between encryption and decryption in DES
+    // is the shift direction (left for encrypt, right for decrypt).
+    // The final key (Kn) is created as round_c_shift and round_d_shift.
+    // Kn-1 is created through right shifts. This has the effect of 
+    // reversing the keys for decryption.
+    wire [27:0] round_c [0:16];
+    wire [27:0] round_d [0:16];
+    assign round_c[0] = i_encrypt ? round_c_perm : round_c_shift;
+    assign round_d[0] = i_encrypt ? round_d_perm : round_d_shift;
+
 
     assign round_dv[0] = i_dv;
+    assign round_enc[0] = i_encrypt;
 
     // Make the copies of each round, and its respective round key generation
     genvar i;
@@ -87,6 +111,8 @@ module des(
                 .i_c(round_c[i]),
                 .i_d(round_d[i]),
                 .i_shift_indicator(SHIFT_SCHEDULE[i]),
+                .i_encrypt(round_enc[i]),
+                .o_encrypt(round_enc[i+1]),
                 .o_rd_key(round_key[i]),
                 .o_c(round_c[i+1]),
                 .o_d(round_d[i+1])
