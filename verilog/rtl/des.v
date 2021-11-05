@@ -18,7 +18,8 @@ module des(
 
 
     // Key shift schedule: 1 means shift 1, 0 means shift 2
-    reg [16:0] SHIFT_SCHEDULE = 16'b1000000100000011;
+    wire [16:0] SHIFT_SCHEDULE;
+    assign SHIFT_SCHEDULE = 16'b1000000100000011;
 
     // Initial Permutation
     // 58 50 42 34 26 18 10 2
@@ -32,7 +33,6 @@ module des(
 
     // Perform initial permutation
     wire [63:0] ct;
-    wire [63:0] initial_permutation;
     assign ct = i_cleartext;
     assign round_data[0] =
         { ct[6], ct[14], ct[22], ct[30], ct[38], ct[46], ct[54], ct[62],
