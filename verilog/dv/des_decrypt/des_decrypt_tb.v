@@ -1,5 +1,5 @@
 `timescale 1ns / 100ps
-`include "des_include.v"
+`include "uprj_netlists.v"
 
 module des_descrypt_tb();
 
