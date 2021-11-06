@@ -68,7 +68,7 @@ module des_tb();
 
     // Main test block
     initial begin
-        $dumpfile("DES_TB.vcd");
+        $dumpfile("des_encrypt.vcd");
         $dumpvars(0, des_tb);
 
         // These are the input and result comparisons

@@ -14,10 +14,10 @@ import os
 
     # reg[63:0] teststring = 64'h921a72b60268a21a;
     # reg[63:0] testkey = 64'hca404e1b3f4f9230;
-abspath = os.path.abspath(__file__)
-os.chdir(os.path.dirname(abspath))
-vdir = os.path.join('..', 'verilog', 'rtl')
-os.chdir(vdir)
+#abspath = os.path.abspath(__file__)
+#os.chdir(os.path.dirname(abspath))
+#vdir = os.path.join('..', 'verilog', 'rtl')
+#os.chdir(vdir)
 
 # Create a input data file, an input key file, and an output comparison file
 # These are used in the testbench

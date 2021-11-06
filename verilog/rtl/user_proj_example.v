@@ -35,7 +35,6 @@
  *-------------------------------------------------------------
  */
 
- `include "des_include.v"
 
 module user_proj_example #(
     parameter BITS = 32
@@ -71,7 +70,7 @@ module user_proj_example #(
     output [2:0] irq
 );
 
-    des_top des_top (
+    des_top dtop (
 
         // clock & reset
         .clk(wb_clk_i),

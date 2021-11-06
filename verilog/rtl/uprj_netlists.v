@@ -25,4 +25,18 @@
 `else
     `include "user_project_wrapper.v"
     `include "user_proj_example.v"
+    `include "sbox.v"
+    `include "sbox1.v"
+    `include "sbox2.v"
+    `include "sbox3.v"
+    `include "sbox4.v"
+    `include "sbox5.v"
+    `include "sbox6.v"
+    `include "sbox7.v"
+    `include "sbox8.v"
+    `include "key_round.v"
+    `include "feistel_function.v"
+    `include "round.v"
+    `include "des.v"
+    `include "des_top.v"
 `endif

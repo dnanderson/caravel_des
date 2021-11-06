@@ -17,8 +17,12 @@ set script_dir [file dirname [file normalize [info script]]]
 
 set ::env(DESIGN_NAME) user_proj_example
 
+set sboxfiles [glob $script_dir/../../verilog/rtl/des/sbox/*.v]
+set desfiles [glob $script_dir/../../verilog/rtl/des/*.v]
+set alldes [concat $sboxfiles $desfiles]
 set ::env(VERILOG_FILES) "\
 	$::env(CARAVEL_ROOT)/verilog/rtl/defines.v \
+	$alldes
 	$script_dir/../../verilog/rtl/user_proj_example.v"
 
 set ::env(DESIGN_IS_CORE) 0
