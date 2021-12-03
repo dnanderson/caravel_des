@@ -39,4 +39,14 @@
     `include "round.v"
     `include "des.v"
     `include "des_top.v"
+
+    `include "async_fifo.v"
+    `include "fifo_2mem.v"
+    `include "fifomem_dp.v"
+    `include "rptr_empty.v"
+    `include "sync_ptr.v"
+    `include "sync_r2w.v"
+    `include "sync_w2r.v"
+    `include "wptr_full.v"
+
 `endif

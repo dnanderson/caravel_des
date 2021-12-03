@@ -23,6 +23,7 @@
 
 module io_ports_tb;
 	reg clock;
+	reg ioclock;
 	reg RSTB;
 	reg CSB;
 	reg power1, power2;
@@ -30,13 +31,20 @@ module io_ports_tb;
 
     	wire gpio;
     	wire [37:0] mprj_io;
-	wire [7:0] mprj_io_0;
 
-	assign mprj_io_0 = mprj_io[7:0];
-	// assign mprj_io_0 = {mprj_io[8:4],mprj_io[2:0]};
+	reg [7:0] inputbus;
+	assign mprj_io[31:24] = inputbus[7:0];
+
+	reg io_ctrl;
+	assign mprj_io[35] = io_ctrl;
+	reg input_io_valid;
+	assign mprj_io[36] = input_io_valid;
+
+	wire [7:0] outputbus;
+	assign outputbus[7:0] = mprj_io[23:16];
+
 
 	assign mprj_io[3] = (CSB == 1'b1) ? 1'b1 : 1'bz;
-	// assign mprj_io[3] = 1'b1;
 
 	// External clock is used by default.  Make this artificially fast for the
 	// simulation.  Normally this would be a slow clock and the digital PLL
@@ -44,8 +52,13 @@ module io_ports_tb;
 
 	always #12.5 clock <= (clock === 1'b0);
 
+	always #20 ioclock <= (ioclock === 1'b0);
+
+	assign mprj_io[34] = ioclock;
+
 	initial begin
 		clock = 0;
+		ioclock = 0;
 	end
 
 	initial begin
@@ -53,7 +66,7 @@ module io_ports_tb;
 		$dumpvars(0, io_ports_tb);
 
 		// Repeat cycles of 1000 clock edges as needed to complete testbench
-		repeat (25) begin
+		repeat (20) begin
 			repeat (1000) @(posedge clock);
 			// $display("+1000 cycles");
 		end
@@ -69,18 +82,15 @@ module io_ports_tb;
 
 	initial begin
 	    // Observe Output pins [7:0]
-	    wait(mprj_io_0 == 8'h01);
-	    wait(mprj_io_0 == 8'h02);
-	    wait(mprj_io_0 == 8'h03);
-    	    wait(mprj_io_0 == 8'h04);
-	    wait(mprj_io_0 == 8'h05);
-            wait(mprj_io_0 == 8'h06);
-	    wait(mprj_io_0 == 8'h07);
-            wait(mprj_io_0 == 8'h08);
-	    wait(mprj_io_0 == 8'h09);
-            wait(mprj_io_0 == 8'h0A);   
-	    wait(mprj_io_0 == 8'hFF);
-	    wait(mprj_io_0 == 8'h00);
+		// These are least signifigant to most signifigant
+	    wait(outputbus == 8'he5);
+	    wait(outputbus == 8'h63);
+	    wait(outputbus == 8'h15);
+		wait(outputbus == 8'h4d);
+		wait(outputbus == 8'h78);
+		wait(outputbus == 8'h27);
+	    wait(outputbus == 8'hcd);
+		wait(outputbus == 8'h96);
 		
 		`ifdef GL
 	    	$display("Monitor: Test 1 Mega-Project IO (GL) Passed");
@@ -95,8 +105,14 @@ module io_ports_tb;
 		CSB  <= 1'b1;		// Force CSB high
 		#2000;
 		RSTB <= 1'b1;	    	// Release reset
-		#170000;
+		#250000;
 		CSB = 1'b0;		// CSB can be released
+		#100;
+		input_io_valid = 1;
+		io_ctrl = 1;
+		inputbus = 8'h12;
+
+		// Time to start manipulating our bus
 	end
 
 	initial begin		// Power-up sequence
@@ -115,7 +131,7 @@ module io_ports_tb;
 	end
 
 	always @(mprj_io) begin
-		#1 $display("MPRJ-IO state = %b ", mprj_io[7:0]);
+		#1 $display("MPRJ-IO state = %b ", outputbus[7:0]);
 	end
 
 	wire flash_csb;

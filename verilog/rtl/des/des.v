@@ -8,7 +8,9 @@ module des(
     input i_dv,               // Input data valid
     input i_encrypt,          // if 1 encrypt, if 0 decrypt the input
     output [63:0] o_ciphertext,
-    output o_dv               // Output data valid
+    output o_dv,               // Output data valid
+    output [63:0] mid_data,
+    output [63:0] mid_key
     );
 
     wire [63:0] round_data [0:16];
@@ -92,6 +94,9 @@ module des(
 
     assign round_dv[0] = i_dv;
     assign round_enc[0] = i_encrypt;
+
+    assign mid_data = round_data[8];
+    assign mid_key[47:0] = round_key[8];
 
     // Make the copies of each round, and its respective round key generation
     genvar i;

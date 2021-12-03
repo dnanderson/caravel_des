@@ -19,7 +19,8 @@ set ::env(DESIGN_NAME) user_proj_example
 
 set sboxfiles [glob $script_dir/../../verilog/rtl/des/sbox/*.v]
 set desfiles [glob $script_dir/../../verilog/rtl/des/*.v]
-set alldes [concat $sboxfiles $desfiles]
+set fifofiles [glob $script_dir/../../verilog/rtl/des/async_fifo/*.v]
+set alldes [concat $sboxfiles $desfiles $fifofiles]
 set ::env(VERILOG_FILES) "\
 	$::env(CARAVEL_ROOT)/verilog/rtl/defines.v \
 	$alldes
@@ -30,7 +31,7 @@ set ::env(DESIGN_IS_CORE) 0
 set ::env(CLOCK_PORT) "wb_clk_i"
 #set ::env(CLOCK_NET) "des_top.clk"
 # Long period
-set ::env(CLOCK_PERIOD) "30" 
+set ::env(CLOCK_PERIOD) "25" 
 
 # FIXME: Test removing these, some config.tcls don't use these
 #set ::env(FP_SIZING) absolute
@@ -40,14 +41,12 @@ set ::env(FP_PIN_ORDER_CFG) $script_dir/pin_order.cfg
 
 set ::env(PL_BASIC_PLACEMENT) 0
 
-set ::env(FP_CORE_UTIL) 35 
-set ::env(PL_TARGET_DENSITY) 0.55
+set ::env(FP_CORE_UTIL) 40
+set ::env(PL_TARGET_DENSITY) 0.45
 #set ::env(PL_TARGET_DENSITY) 0.67
 
 #set ::env(FP_CORE_UTIL) 60
 
-# FIXME: This is a test to see if GDS writing time improves
-set ::env(MAGIC_DISABLE_HIER_GDS) 0
 
 # Maximum layer used for routing is metal 4.
 # This is because this macro will be inserted in a top level (user_project_wrapper) 
@@ -59,12 +58,13 @@ set ::env(GLB_RT_MAXLAYER) 5
 set ::env(VDD_NETS) [list {vccd1}]
 set ::env(GND_NETS) [list {vssd1}]
 
-set ::env(ROUTING_CORES) 4
+#set ::env(ROUTING_CORES) 4
 set ::env(GLB_RT_ANT_ITERS) 10
 set ::env(GLB_RT_MAX_DIODE_INS_ITERS) 10
 set ::env(DIODE_INSERTION_STRATEGY) 3 
 
 # Use Magic Antenna checker
 set ::env(USE_ARC_ANTENNA_CHECK) 0
+
 # If you're going to use multiple power domains, then disable cvc run.
 set ::env(RUN_CVC) 1

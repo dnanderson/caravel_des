@@ -23,11 +23,18 @@
 
 /*
 	MPRJ Logic Analyzer Test:
-		- Observes counter value through LA probes [31:0] 
-		- Sets counter initial value through LA probes [63:32]
-		- Flags when counter value exceeds 500 through the management SoC gpio
+		- Observes the mid point of the encryption stages
 		- Outputs message to the UART when the test concludes successfuly
 */
+
+#define reg_des_in_l (*(volatile uint32_t *)0x30000000)
+#define reg_des_in_h (*(volatile uint32_t *)0x30000004)
+#define reg_des_out_l (*(volatile uint32_t *)0x30000008)
+#define reg_des_out_h (*(volatile uint32_t *)0x3000000C)
+#define reg_des_key_l (*(volatile uint32_t *)0x30000010)
+#define reg_des_key_h (*(volatile uint32_t *)0x30000014)
+#define reg_des_ctrl (*(volatile uint32_t *)0x30000018)
+#define reg_des_sts (*(volatile uint32_t *)0x3000001C)
 
 void main()
 {
@@ -98,27 +105,29 @@ void main()
 	// Configure LA probes [31:0], [127:64] as inputs to the cpu 
 	// Configure LA probes [63:32] as outputs from the cpu
 	reg_la0_oenb = reg_la0_iena = 0xFFFFFFFF;    // [31:0]
-	reg_la1_oenb = reg_la1_iena = 0x00000000;    // [63:32]
+	reg_la1_oenb = reg_la1_iena = 0xFFFFFFFF;    // [63:32]
 	reg_la2_oenb = reg_la2_iena = 0xFFFFFFFF;    // [95:64]
 	reg_la3_oenb = reg_la3_iena = 0xFFFFFFFF;    // [127:96]
 
 	// Flag start of the test 
 	reg_mprj_datal = 0xAB400000;
+    reg_des_in_l =  0x23d9d4a2;
+    reg_des_in_h =  0x3735f53b;
+    reg_des_key_l = 0xbacde229;
+    reg_des_key_h = 0x652429cc;
+    reg_des_ctrl = 0x3;
 
-	// Set Counter value to zero through LA probes [63:32]
-	reg_la1_data = 0x00000000;
-
-	// Configure LA probes from [63:32] as inputs to disable counter write
-	reg_la1_oenb = reg_la1_iena = 0xFFFFFFFF;    
 
 	while (1) {
-		if (reg_la0_data > 0x1F4) {
+		// Look for a known value for the given inputs
+		if (reg_la0_data == 0x989989BE) {
+			// Tell the testbench we are done
 			reg_mprj_datal = 0xAB410000;
 			break;
 		}
 	}
-	print("\n");
-	print("Monitor: Test 2 Passed\n\n");	// Makes simulation very long!
-	reg_mprj_datal = 0xAB510000;
+	// print("\n");
+	// print("Monitor: Test 2 Passed\n\n");	// Makes simulation very long!
+	// reg_mprj_datal = 0xAB510000;
 }
 

@@ -51,7 +51,8 @@ set ::env(MACRO_PLACEMENT_CFG) $script_dir/macro.cfg
 ### Black-box verilog and views
 set sboxfiles [glob $script_dir/../../verilog/rtl/des/sbox/*.v]
 set desfiles [glob $script_dir/../../verilog/rtl/des/*.v]
-set alldes [concat $sboxfiles $desfiles]
+set fifofiles [glob $script_dir/../../verilog/rtl/des/async_fifo/*.v]
+set alldes [concat $sboxfiles $desfiles $fifofiles]
 set ::env(VERILOG_FILES_BLACKBOX) "\
 	$::env(CARAVEL_ROOT)/verilog/rtl/defines.v \
 	$alldes

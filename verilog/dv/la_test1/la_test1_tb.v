@@ -46,8 +46,8 @@ module la_test1_tb;
 	assign mprj_io[3] = (CSB == 1'b1) ? 1'b1 : 1'bz;
 
 	initial begin
-		// $dumpfile("la_test1.vcd");
-		// $dumpvars(0, la_test1_tb);
+		$dumpfile("la_test1.vcd");
+		$dumpvars(0, la_test1_tb);
 
 		// Repeat cycles of 1000 clock edges as needed to complete testbench
 		repeat (200) begin
@@ -68,8 +68,12 @@ module la_test1_tb;
 		wait(checkbits == 16'hAB40);
 		$display("LA Test 1 started");
 		wait(checkbits == 16'hAB41);
-		wait(checkbits == 16'hAB51);
 		#10000;
+		`ifdef GL
+	    	$display("Monitor: Test 1 Mega-Project LA (GL) Passed");
+		`else
+		    $display("Monitor: Test 1 Mega-Project LA (RTL) Passed");
+		`endif
 		$finish;
 	end
 

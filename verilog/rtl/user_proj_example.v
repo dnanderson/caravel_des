@@ -62,9 +62,9 @@ module user_proj_example #(
     input  [127:0] la_oenb,
 
     // IOs
-    input  [`MPRJ_IO_PADS-1:0] io_in,
-    output [`MPRJ_IO_PADS-1:0] io_out,
-    output [`MPRJ_IO_PADS-1:0] io_oeb,
+    input  [38-1:0] io_in,
+    output [38-1:0] io_out,
+    output [38-1:0] io_oeb,
 
     // IRQ
     output [2:0] irq
@@ -83,7 +83,15 @@ module user_proj_example #(
         .i_wb_addr  (wbs_adr_i),
         .i_wb_data  (wbs_dat_i),
         .o_wb_ack   (wbs_ack_o),
-        .o_wb_data  (wbs_dat_o)
+        .o_wb_data  (wbs_dat_o),
+
+        .la_data_in (la_data_in),
+        .la_data_out (la_data_out),
+        .la_oenb (la_oenb),
+
+        .io_in (io_in),
+        .io_out (io_out),
+        .io_oeb (io_oeb)
     );
 
 endmodule
