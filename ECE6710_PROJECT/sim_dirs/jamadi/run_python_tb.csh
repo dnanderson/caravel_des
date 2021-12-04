@@ -1,1 +1,0 @@
-../../scripts/run_python_tb.csh

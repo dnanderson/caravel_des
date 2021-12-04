@@ -29,6 +29,7 @@ UPRJ_RTL_PATH = $(UPRJ_VERILOG_PATH)/rtl
 UPRJ_BEHAVIOURAL_MODELS = ../
 UPRJ_DES_PATH = $(UPRJ_VERILOG_PATH)/rtl/des
 UPRJ_SBOX_PATH = $(UPRJ_VERILOG_PATH)/rtl/des/sbox
+UPRJ_ASYNC_PATH = $(UPRJ_VERILOG_PATH)/rtl/des/async_fifo
 
 ## Simulation mode: RTL/GL
 SIM_DEFINES = -DFUNCTIONAL -DSIM
@@ -47,6 +48,7 @@ des_encrypt.vvp: des_encrypt_tb.v
 	-I $(CARAVEL_BEHAVIOURAL_MODELS) -I $(CARAVEL_RTL_PATH) \
 	-I $(UPRJ_BEHAVIOURAL_MODELS)    -I $(UPRJ_RTL_PATH) \
 	-I $(UPRJ_DES_PATH) -I $(UPRJ_SBOX_PATH) \
+	-I $(UPRJ_ASYNC_PATH) \
 	$< -o $@ 
 
 vcd: des_encrypt.vvp key_input.txt block_input.txt expected.txt
