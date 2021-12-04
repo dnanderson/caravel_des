@@ -31,7 +31,7 @@ set ::env(DESIGN_IS_CORE) 0
 set ::env(CLOCK_PORT) "wb_clk_i"
 #set ::env(CLOCK_NET) "des_top.clk"
 # Long period
-set ::env(CLOCK_PERIOD) "25" 
+set ::env(CLOCK_PERIOD) "18" 
 
 # FIXME: Test removing these, some config.tcls don't use these
 #set ::env(FP_SIZING) absolute
