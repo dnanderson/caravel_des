@@ -28,6 +28,7 @@ module io_ports_tb;
 	reg CSB;
 	reg power1, power2;
 	reg power3, power4;
+	reg setreq;
 
     	wire gpio;
     	wire [37:0] mprj_io;
@@ -35,10 +36,10 @@ module io_ports_tb;
 	reg [7:0] inputbus;
 	assign mprj_io[31:24] = inputbus[7:0];
 
-	reg io_ctrl;
-	assign mprj_io[35] = io_ctrl;
-	reg input_io_valid;
-	assign mprj_io[36] = input_io_valid;
+	reg req;
+	assign mprj_io[36] = req;
+	wire ack;
+	assign ack = mprj_io[33];
 
 	wire [7:0] outputbus;
 	assign outputbus[7:0] = mprj_io[23:16];
@@ -100,19 +101,52 @@ module io_ports_tb;
 	    $finish;
 	end
 
+	reg busy;
+	always@ (req, ack) begin
+		if (req || ack) begin
+			busy = 1;
+		end
+		else begin
+			busy = 0;
+		end
+	end
+
+
+	always @(posedge clock) begin
+		if ((!busy)&&(setreq))
+			req <= 1'b1;
+		else if (ack)
+			req <= 1'b0;
+	end
+
+
+	integer ii = 0;
+    task setbus;
+        input [7:0] data;
+        begin
+            // Wait for negative edge of clock and then start setting inputs
+			inputbus = data;
+			setreq = 1;
+			wait(busy == 1'b1);
+			wait(busy != 1'b1);
+        end
+    endtask
+
+
 	initial begin
 		RSTB <= 1'b0;
 		CSB  <= 1'b1;		// Force CSB high
+		req = 0;
+		setreq = 0;
 		#2000;
 		RSTB <= 1'b1;	    	// Release reset
 		#250000;
-		CSB = 1'b0;		// CSB can be released
+		CSB = 1'b1;		// CSB can be released
 		#100;
-		input_io_valid = 1;
-		io_ctrl = 1;
-		inputbus = 8'h12;
+        for (ii=0; ii < 16; ii = ii + 1) begin
+			setbus(8'h12);
+        end
 
-		// Time to start manipulating our bus
 	end
 
 	initial begin		// Power-up sequence

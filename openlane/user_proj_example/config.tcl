@@ -32,9 +32,10 @@ set ::env(VERILOG_FILES) "\
 set ::env(DESIGN_IS_CORE) 0
 
 set ::env(CLOCK_PORT) "wb_clk_i"
+set ::env(CLOCK_NET) "wb_clk_i"
 #set ::env(CLOCK_NET) "des_top.clk"
 # Long period
-set ::env(CLOCK_PERIOD) "18" 
+set ::env(CLOCK_PERIOD) "20" 
 
 # FIXME: Test removing these, some config.tcls don't use these
 #set ::env(FP_SIZING) absolute
@@ -44,8 +45,8 @@ set ::env(FP_PIN_ORDER_CFG) $script_dir/pin_order.cfg
 
 set ::env(PL_BASIC_PLACEMENT) 0
 
-set ::env(FP_CORE_UTIL) 40
-set ::env(PL_TARGET_DENSITY) 0.45
+set ::env(FP_CORE_UTIL) 35 
+set ::env(PL_TARGET_DENSITY) 0.46
 #set ::env(PL_TARGET_DENSITY) 0.67
 
 #set ::env(FP_CORE_UTIL) 60
@@ -64,7 +65,7 @@ set ::env(GND_NETS) [list {vssd1}]
 #set ::env(ROUTING_CORES) 4
 set ::env(GLB_RT_ANT_ITERS) 10
 set ::env(GLB_RT_MAX_DIODE_INS_ITERS) 10
-set ::env(DIODE_INSERTION_STRATEGY) 3 
+set ::env(DIODE_INSERTION_STRATEGY) 3
 
 # Use Magic Antenna checker
 set ::env(USE_ARC_ANTENNA_CHECK) 0

@@ -2,18 +2,17 @@
 ===========================================================================
 report_checks -unconstrained
 ============================================================================
-Startpoint: io_in[36] (input port clocked by user_clock2)
-Endpoint: mprj/io_in[36] (internal pin)
+Startpoint: wb_clk_i (clock source 'wb_clk_i')
+Endpoint: mprj/wb_clk_i (internal pin)
 Path Group: (none)
 Path Type: max
 
 Fanout     Cap    Slew   Delay    Time   Description
 -----------------------------------------------------------------------------
-                          3.60    3.60 ^ input external delay
-                  6.26    5.20    8.80 ^ io_in[36] (in)
-     1    0.78                           io_in[36] (net)
-                  7.21    0.00    8.80 ^ mprj/io_in[36] (user_proj_example)
-                                  8.80   data arrival time
+                  2.03    1.89   11.89 v wb_clk_i (in)
+     1    0.45                           wb_clk_i (net)
+                  2.18    0.00   11.89 v mprj/wb_clk_i (user_proj_example)
+                                 11.89   data arrival time
 -----------------------------------------------------------------------------
 (Path is unconstrained)
 

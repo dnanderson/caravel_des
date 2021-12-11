@@ -106,6 +106,8 @@ void main()
     reg_des_key_l = 0xbacde229;
     reg_des_key_h = 0x652429cc;
     reg_des_ctrl = 0x3;
+    reg_mprj_datal = 0xAB700000;
+
 
     while (reg_des_sts != 1);
     if ((reg_des_out_l == 0x4a85f2c6) && (reg_des_out_h == 0x8e0e5a56))

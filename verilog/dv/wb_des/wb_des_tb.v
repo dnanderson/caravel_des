@@ -41,7 +41,7 @@ module wb_port_tb;
 	// simulation.  Normally this would be a slow clock and the digital PLL
 	// would be the fast clock.
 
-	always #12.5 clock <= (clock === 1'b0);
+	always #30 clock <= (clock === 1'b0);
 
 	initial begin
 		clock = 0;
@@ -49,12 +49,15 @@ module wb_port_tb;
 
 	initial begin
 		$dumpfile("wb_port.vcd");
-		$dumpvars(0, wb_port_tb);
+		//$dumpvars(0, wb_port_tb);
+		$dumpvars(1, wb_port_tb);
+		//$dumpvars(1, wb_port_tb.uut);
+		$dumpvars(0, wb_port_tb.uut.mprj.mprj);
 
 		// Repeat cycles of 1000 clock edges as needed to complete testbench
 		repeat (30) begin
 			repeat (1000) @(posedge clock);
-			// $display("+1000 cycles");
+			//$display("+1000 cycles");
 		end
 		$display("%c[1;31m",27);
 		`ifdef GL
@@ -84,7 +87,7 @@ module wb_port_tb;
 		#2000;
 		RSTB <= 1'b1;	    	// Release reset
 		#170000;
-		CSB = 1'b0;		// CSB can be released
+		//CSB = 1'b0;		// CSB can be released
 	end
 
 	initial begin		// Power-up sequence
